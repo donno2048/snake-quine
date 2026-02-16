@@ -8,3 +8,4 @@ Arrow keys to move, q to quit, p to pause
 
 - set terminal size to fit program
 - fix linebreak problem
+- tidy `f`

@@ -9,3 +9,4 @@ Arrow keys to move, q to quit
 - set terminal size to fit program
 - will be easy to add p for pausing
 - fix linebreak problem
+- tidy `f`

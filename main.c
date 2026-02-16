@@ -45,11 +45,11 @@ char *f = "};int m=%d,h=%d,w=%d;%c#include <stdio.h>%c#include <unistd.h>%c"
 "(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case 'x':case 'X':goto _exit;"
 "case 'o':{char rX,rY;do{rX=(rand()%c(w-2))+1;rY=(rand()%c(h-2))+1;}while(lines"
 "[rY][rX]!=' ');lines[rY][rX]='o';break;}case ' ':lines[NEXT_LOCATION(tail)]"
-"[NEXT_LOCATION(tail)]=' ';}lines[pY][pX]='x';printf(%c%cc%cc[2J%cc[1;1Hchar "
-"lines[%d][%d]={%c,10, 27, 27);for(char line=0;line<h;line++)printf(%c%cc%cc"
+"[NEXT_LOCATION(tail)]=' ';}lines[pY][pX]='x';printf(%c%cc[2J%cc[Hchar "
+"lines[%d][%d]={%c,27,27);for(char line=0;line<h;line++)printf(%c%cc%cc"
 "%cs%cc,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int "
 "loc=0;loc<m;loc++)printf(%c%cd,%c,locations[loc]);printf(f,m,h,w,10,10,10,10"
-",10,10,37,10,34,f,34,pX,pY,head,tail,dirX,dirY,37,37,34,37,37,37,h,w+1,34,34"
+",10,10,37,10,34,f,34,pX,pY,head,tail,dirX,dirY,37,37,34,37,37,h,w+1,34,34"
 ",37,37,37,37,34,34,m,34,34,37,34,10);}_exit:tcsetattr(STDIN_FILENO,TCSANOW,"
 "&oldt);return 0;}%c";
 int main() {
@@ -96,14 +96,14 @@ _sleep:
             case ' ': lines[NEXT_LOCATION(tail)][NEXT_LOCATION(tail)] = ' ';
         }
         lines[pY][pX] = 'x';
-        printf("%c%c[2J%c[1;1Hchar lines[%d][%d] = {", 10, 27, 27, HEIGHT, WIDTH + 1);
+        printf("%c[2J%c[Hchar lines[%d][%d] = {", 27, 27, HEIGHT, WIDTH + 1);
         for (char line = 0; line < HEIGHT; line++)
             printf("%c%c%s%c,", 10, 34, lines[line], 34);
         printf("};char locations[%d] = {", MAX_LOCATIONS);
         for (int loc = 0; loc < MAX_LOCATIONS; loc++)
             printf("%d,", locations[loc]);
         printf(f, MAX_LOCATIONS, HEIGHT, WIDTH, 10, 10, 10, 10, 10, 10, 37, 10, 34, f, 34, pX,
-               pY, head, tail, dirX, dirY, 37, 37, 34, 37, 37, 37, HEIGHT, WIDTH + 1, 34, 34, 37, 37,
+               pY, head, tail, dirX, dirY, 37, 37, 34, 37, 37, HEIGHT, WIDTH + 1, 34, 34, 37, 37,
                37, 37, 34, 34, MAX_LOCATIONS, 34, 34, 37, 34, 10);
     }
 _exit:

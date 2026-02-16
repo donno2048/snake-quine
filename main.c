@@ -33,8 +33,8 @@ char *f = "};int m=%d,h=%d,w=%d;%c#include <stdio.h>%c#include <unistd.h>%c"
 "(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case "STR(PLAYER)":case "STR(WALL)":goto _exit;"
 "case "STR(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h-2))+1;}while(lines"
 "[rY][rX]!="STR(EMPTY)");lines[rY][rX]="STR(FOOD)";break;}case "STR(EMPTY)":lines[NEXT_LOCATION(tail)]"
-"[NEXT_LOCATION(tail)]="STR(EMPTY)";}lines[pY][pX]="STR(PLAYER)";printf(%c%%c[2J%%c[Hchar "
-"lines[%d][%d]={%c,27,27);for(char line=0;line<h;line++)printf(%c%%c%%c"
+"[NEXT_LOCATION(tail)]="STR(EMPTY)";}lines[pY][pX]="STR(PLAYER)";printf(%c%%c[H%%c[2J%%c[3Jchar "
+"lines[%d][%d]={%c,27,27,27);for(char line=0;line<h;line++)printf(%c%%c%%c"
 "%%s%%c,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int "
 "loc=0;loc<m;loc++)printf(%c%%d,%c,locations[loc]);printf(f,m,h,w,10,10,10,10"
 ",10,10,10,34,f,34,pX,pY,head,tail,dirX,dirY,34,h,w+1,34,34"
@@ -98,7 +98,7 @@ _sleep:
             case EMPTY: lines[NEXT_LOCATION(tail)][NEXT_LOCATION(tail)] = EMPTY;
         }
         lines[pY][pX] = PLAYER;
-        printf("%c[2J%c[Hchar lines[%d][%d] = {", 27, 27, HEIGHT, WIDTH + 1);
+        printf("%c[H%c[2J%c[3Jchar lines[%d][%d] = {", 27, 27, 27, HEIGHT, WIDTH + 1);
         for (char line = 0; line < HEIGHT; line++)
             printf("%c%c%s%c,", 10, 34, lines[line], 34);
         printf("};char locations[%d] = {", MAX_LOCATIONS);

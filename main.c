@@ -1,5 +1,5 @@
-#define WIDTH 20
-#define HEIGHT 20
+#define WIDTH 25
+#define HEIGHT 15
 #define FOOD 'o'
 #define PLAYER 'x'
 #define WALL 'X'

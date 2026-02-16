@@ -22,7 +22,7 @@ char locations[MAX_LOCATIONS] = {0};
 
 char *f = "};int m=%d,h=%d,w=%d;%c#include <stdio.h>%c#include <unistd.h>%c"
 "#include <stdlib.h>%c#include <fcntl.h>%c#include <termios.h>%c#define "
-"NEXT_LOCATION(x) locations [x=(x+1)%cm]%cchar *f=%c%s%c;int main(){struct "
+"NEXT_LOCATION(x) locations [x=(x+1)%%m]%cchar *f=%c%s%c;int main(){struct "
 "termios oldt,newt;tcgetattr(STDIN_FILENO,&oldt);newt=oldt;newt.c_lflag&=~"
 "(ICANON|ECHO);tcsetattr(STDIN_FILENO,TCSANOW,&newt);fcntl(STDIN_FILENO,F_SETFL"
 ",fcntl(STDIN_FILENO,F_GETFL,0)|O_NONBLOCK);int pX=%d,pY=%d,head=%d,tail=%d,dirX"
@@ -31,14 +31,14 @@ char *f = "};int m=%d,h=%d,w=%d;%c#include <stdio.h>%c#include <unistd.h>%c"
 "=0;dirY=1;break;case 0x43:dirX=1;dirY=0;break;case 0x44:dirX=-1;dirY=0;break;"
 "case 'Q':goto _exit;case 'P': goto _sleep;}NEXT_LOCATION(head)=pY;NEXT_LOCATION"
 "(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case "STR(PLAYER)":case "STR(WALL)":goto _exit;"
-"case "STR(FOOD)":{char rX,rY;do{rX=(rand()%c(w-2))+1;rY=(rand()%c(h-2))+1;}while(lines"
+"case "STR(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h-2))+1;}while(lines"
 "[rY][rX]!="STR(EMPTY)");lines[rY][rX]="STR(FOOD)";break;}case "STR(EMPTY)":lines[NEXT_LOCATION(tail)]"
-"[NEXT_LOCATION(tail)]="STR(EMPTY)";}lines[pY][pX]="STR(PLAYER)";printf(%c%cc[2J%cc[Hchar "
-"lines[%d][%d]={%c,27,27);for(char line=0;line<h;line++)printf(%c%cc%cc"
-"%cs%cc,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int "
-"loc=0;loc<m;loc++)printf(%c%cd,%c,locations[loc]);printf(f,m,h,w,10,10,10,10"
-",10,10,37,10,34,f,34,pX,pY,head,tail,dirX,dirY,37,37,34,37,37,h,w+1,34,34"
-",37,37,37,37,34,34,m,34,34,37,34,10);}_exit:tcsetattr(STDIN_FILENO,TCSANOW,"
+"[NEXT_LOCATION(tail)]="STR(EMPTY)";}lines[pY][pX]="STR(PLAYER)";printf(%c%%c[2J%%c[Hchar "
+"lines[%d][%d]={%c,27,27);for(char line=0;line<h;line++)printf(%c%%c%%c"
+"%%s%%c,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int "
+"loc=0;loc<m;loc++)printf(%c%%d,%c,locations[loc]);printf(f,m,h,w,10,10,10,10"
+",10,10,10,34,f,34,pX,pY,head,tail,dirX,dirY,34,h,w+1,34,34"
+",34,34,m,34,34,34,10);}_exit:tcsetattr(STDIN_FILENO,TCSANOW,"
 "&oldt);return 0;}%c";
 
 int main() {
@@ -104,9 +104,8 @@ _sleep:
         printf("};char locations[%d] = {", MAX_LOCATIONS);
         for (int loc = 0; loc < MAX_LOCATIONS; loc++)
             printf("%d,", locations[loc]);
-        printf(f, MAX_LOCATIONS, HEIGHT, WIDTH, 10, 10, 10, 10, 10, 10, 37, 10, 34, f, 34, pX,
-               pY, head, tail, dirX, dirY, 37, 37, 34, 37, 37, HEIGHT, WIDTH + 1, 34, 34, 37, 37,
-               37, 37, 34, 34, MAX_LOCATIONS, 34, 34, 37, 34, 10);
+        printf(f, MAX_LOCATIONS, HEIGHT, WIDTH, 10, 10, 10, 10, 10, 10, 10, 34, f, 34, pX, pY, head,
+               tail, dirX, dirY, 34, HEIGHT, WIDTH + 1, 34, 34, 34, 34, MAX_LOCATIONS, 34, 34, 34, 10);
     }
 _exit:
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);

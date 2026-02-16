@@ -8,4 +8,3 @@ Arrow keys to move, q to quit, p to pause
 
 - fix linebreak problem
 - tidy `f`
-- maybe wider game

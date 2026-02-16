@@ -38,13 +38,13 @@ char *f = "};int m=%d,h=%d,w=%d;%c#include <stdio.h>%c#include <unistd.h>%c"
 "termios oldt,newt;tcgetattr(STDIN_FILENO,&oldt);newt=oldt;newt.c_lflag&=~"
 "(ICANON|ECHO);tcsetattr(STDIN_FILENO,TCSANOW,&newt);fcntl(STDIN_FILENO,F_SETFL"
 ",fcntl(STDIN_FILENO,F_GETFL,0)|O_NONBLOCK);int pX=%d,pY=%d,head=%d,tail=%d,dirX"
-"=%d,dirY=%d;char key=0;while(1){usleep(200000L);for(char c;read(STDIN_FILENO"
-",&c,1)>0||!key;key=c);switch(key){case 0x41:dirX=0;dirY=-1;break;case 0x42:dirX"
+"=%d,dirY=%d;char key=0;while(1){_sleep:usleep(200000L);for(char c;read(STDIN_FILENO"
+",&c,1)>0||!key;key=c);switch(key&0xdf){case 0x41:dirX=0;dirY=-1;break;case 0x42:dirX"
 "=0;dirY=1;break;case 0x43:dirX=1;dirY=0;break;case 0x44:dirX=-1;dirY=0;break;"
-"case 'q':goto _exit;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;"
-"pY+=dirY;switch(lines[pY][pX]){case 'x':case 'X':goto _exit;case 'o':{char rX"
-",rY;do{rX=(rand()%c(w-2))+1;rY=(rand()%c(h-2))+1;}while(lines[rY][rX]"
-"!=' ');lines[rY][rX]='o';break;}case ' ':lines[NEXT_LOCATION(tail)]"
+"case 'Q':goto _exit;case 'P': goto _sleep;}NEXT_LOCATION(head)=pY;NEXT_LOCATION"
+"(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case 'x':case 'X':goto _exit;"
+"case 'o':{char rX,rY;do{rX=(rand()%c(w-2))+1;rY=(rand()%c(h-2))+1;}while(lines"
+"[rY][rX]!=' ');lines[rY][rX]='o';break;}case ' ':lines[NEXT_LOCATION(tail)]"
 "[NEXT_LOCATION(tail)]=' ';}lines[pY][pX]='x';printf(%c%cc%cc[2J%cc[1;1Hchar "
 "lines[%d][%d]={%c,10, 27, 27);for(char line=0;line<h;line++)printf(%c%cc%cc"
 "%cs%cc,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int "
@@ -66,14 +66,16 @@ int main() {
 
     char key = 0;
     while (1) {
+_sleep:
         usleep(200000L);
         for (char c; read(STDIN_FILENO, &c, 1) > 0 || !key; key = c);
-        switch (key) {
+        switch (key & 0xDF) {
             case 0x41: dirX = 0; dirY = -1; break;
             case 0x42: dirX = 0; dirY = 1; break;
             case 0x43: dirX = 1; dirY = 0; break;
             case 0x44: dirX = -1; dirY = 0; break;
-            case 'q': goto _exit;
+            case 'Q': goto _exit;
+            case 'P': goto _sleep;
         }
         NEXT_LOCATION(head) = pY;
         NEXT_LOCATION(head) = pX;

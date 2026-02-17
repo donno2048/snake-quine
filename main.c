@@ -62,17 +62,17 @@ char locations[MAX_LOCATIONS] = {0};
 
 char *f = "};int m=%d,h="S(HEIGHT)",w="S(WIDTH)";%c#include<stdio.h>%c#include<stdlib.h>%c" INCLUDES
 "#define NEXT_LOCATION(x) locations[x=(x+1)%%m]%cchar*f=%c%s%c;int main(){"S(SETUP_SCREEN())"int pX"
-"=%d,pY=%d,head=%d,tail=%d,dirX=%d,dirY=%d;char key=0;while(1){"S(SLEEP())S(GET_KEY(key))"sw"
-"itch(key){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case " S(RIGHT)
-":dirX=1;dirY=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':case'q':goto _exit;case'P':case'p':case 0:continue"
-";}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case" S
-(PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h"
-"-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":lines[NEXT_"
-"LOCATION(tail)][NEXT_LOCATION(tail)]="S(EMPTY)";}lines[pY][pX]="S(PLAYER)";printf(%c%%c[H%%c[2J%%c"
-"[3Jchar lines[%d][%d] = {%c,27,27,27);for(char line=0;line<h;line++)printf(%c%%c%%c%%s%%c,%c,10,34"
-",lines[line],34);printf(%c};char locations[%d]={%c);for(int loc=0;loc<m;loc++)printf(%c%%d,%c,loca"
-"tions[loc]);printf(f,m,10,10,10,"S(INCLUDES_FORMAT)",10,34,f,34,pX,pY,head,tail,dirX,dirY,34,h,w+1"
-",34,34,34,34,m,34,34,34,10);}_exit:"S(RESET_SCREEN())"return 0;}%c";
+"=%d,pY=%d,head=%d,tail=%d,dirX=%d,dirY=%d;char key=0;while(1){"S(SLEEP())S(GET_KEY(key))"switch(ke"
+"y){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case "S(RIGHT)":dirX=1;dir"
+"Y=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':case'q':goto _exit;case'P':case'p':case 0:co"
+"ntinue;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case"
+S(PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%("
+"h-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":lines[NEXT"
+"_LOCATION(tail)][NEXT_LOCATION(tail)]="S(EMPTY)";}lines[pY][pX]="S(PLAYER)";printf(%c%%c[H%%c[2J%%"
+"c[3Jchar lines[%d][%d] = {%c,27,27,27);for(char line=0;line<h;line++)printf(%c%%c%%c%%s%%c,%c,10,3"
+"4,lines[line],34);printf(%c};char locations[%d]={%c);for(int loc=0;loc<m;loc++)printf(%c%%d,%c,loc"
+"ations[loc]);printf(f,m,10,10,10,"S(INCLUDES_FORMAT)",10,34,f,34,pX,pY,head,tail,dirX,dirY,34,h,w+"
+"1,34,34,34,34,m,34,34,34,10);}_exit:"S(RESET_SCREEN())"return 0;}%c";
 
 int main() {
     SETUP_SCREEN();
@@ -131,8 +131,8 @@ int main() {
         printf("};char locations[%d]={", MAX_LOCATIONS);
         for (int loc = 0; loc < MAX_LOCATIONS; loc++)
             printf("%d,", locations[loc]);
-        printf(f, MAX_LOCATIONS, 10, 10, 10, INCLUDES_FORMAT, 10, 34, f, 34, pX, pY, head,
-               tail, dirX, dirY, 34, HEIGHT, WIDTH + 1, 34, 34, 34, 34, MAX_LOCATIONS, 34, 34, 34, 10);
+        printf(f, MAX_LOCATIONS, 10, 10, 10, INCLUDES_FORMAT, 10, 34, f, 34, pX, pY, head, tail,
+               dirX, dirY, 34, HEIGHT, WIDTH + 1, 34, 34, 34, 34, MAX_LOCATIONS, 34, 34, 34, 10);
     }
 _exit:
     RESET_SCREEN();

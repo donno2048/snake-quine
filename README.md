@@ -4,6 +4,3 @@ In order to play you have to use a monospaced terminal font, and font size small
 
 Arrow keys to move, q to quit, p to pause
 
-## TODO
-
-- tidy f

@@ -6,4 +6,4 @@ Arrow keys to move, q to quit, p to pause
 
 ## TODO
 
-- test windows support
+- tidy f

@@ -15,7 +15,7 @@
 #define DOWN 40
 #define RIGHT 39
 #define LEFT 37
-#define SETUP_SCREEN() SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),ENABLE_PROCESSED_OUTPUT|ENABLE_WRAP_AT_EOL_OUTPUT|ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+#define SETUP_SCREEN() SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),5);
 #define RESET_SCREEN()
 #define SLEEP() Sleep(200);
 #define GET_KEY(key) {\
@@ -26,7 +26,7 @@
                          while(events){\
                              ReadConsoleInput(in,&rec,1,&read);\
                              if(rec.EventType==KEY_EVENT)\
-                                 key=((KEY_EVENT_RECORD&)rec.Event).wVirtualKeyCode;\
+                                 key=rec.Event.KeyEvent.wVirtualKeyCode;\
                              GetNumberOfConsoleInputEvents(in,&events);\
                          }\
                      }
@@ -62,10 +62,10 @@ char locations[MAX_LOCATIONS] = {0};
 
 char *f = "};int m=%d,h="S(HEIGHT)",w="S(WIDTH)";%c#include<stdio.h>%c#include<stdlib.h>%c" INCLUDES
 "#define NEXT_LOCATION(x) locations[x=(x+1)%%m]%cchar*f=%c%s%c;int main(){"S(SETUP_SCREEN())"int pX"
-"=%d,pY=%d,head=%d,tail=%d,dirX=%d,dirY=%d;char key=0;while(1){_sleep:"S(SLEEP())S(GET_KEY(key))"sw"
-"itch(key&0xdf){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case " S(RIGHT)
-":dirX=1;dirY=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':goto _exit;case'P':case 0:goto _s"
-"leep;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case" S
+"=%d,pY=%d,head=%d,tail=%d,dirX=%d,dirY=%d;char key=0;while(1){"S(SLEEP())S(GET_KEY(key))"sw"
+"itch(key){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case " S(RIGHT)
+":dirX=1;dirY=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':case'q':goto _exit;case'P':case'p':case 0:continue"
+";}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case" S
 (PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h"
 "-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":lines[NEXT_"
 "LOCATION(tail)][NEXT_LOCATION(tail)]="S(EMPTY)";}lines[pY][pX]="S(PLAYER)";printf(%c%%c[H%%c[2J%%c"
@@ -96,16 +96,15 @@ int main() {
     char key = 0;
 
     while (1) {
-_sleep:
         SLEEP();
         GET_KEY(key);
-        switch (key & 0xDF) {
+        switch (key) {
             case UP: dirX = 0; dirY = -1; break;
             case DOWN: dirX = 0; dirY = 1; break;
             case RIGHT: dirX = 1; dirY = 0; break;
             case LEFT: dirX = -1; dirY = 0; break;
-            case 'Q': goto _exit;
-            case 'P': case 0: goto _sleep;
+            case 'Q': case 'q': goto _exit;
+            case 'P': case 'p': case 0: continue;
         }
         NEXT_LOCATION(head) = pY;
         NEXT_LOCATION(head) = pX;

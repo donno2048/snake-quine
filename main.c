@@ -64,8 +64,8 @@ char *f = "};int m=%d,h="S(HEIGHT)",w="S(WIDTH)";%c#include<stdio.h>%c#include<s
 "#define NEXT_LOCATION(x) locations[x=(x+1)%%m]%cchar*f=%c%s%c;int main(){"S(SETUP_SCREEN())"int pX"
 "=%d,pY=%d,head=%d,tail=%d,dirX=%d,dirY=%d;char key=0;while(1){_sleep:"S(SLEEP())S(GET_KEY(key))"sw"
 "itch(key&0xdf){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case " S(RIGHT)
-":dirX=1;dirY=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':goto _exit;case'P':default:goto _"
-"sleep;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case"S
+":dirX=1;dirY=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':goto _exit;case'P':case 0:goto _s"
+"leep;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case" S
 (PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h"
 "-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":lines[NEXT_"
 "LOCATION(tail)][NEXT_LOCATION(tail)]="S(EMPTY)";}lines[pY][pX]="S(PLAYER)";printf(%c%%c[H%%c[2J%%c"
@@ -105,7 +105,7 @@ _sleep:
             case RIGHT: dirX = 1; dirY = 0; break;
             case LEFT: dirX = -1; dirY = 0; break;
             case 'Q': goto _exit;
-            case 'P': default: goto _sleep;
+            case 'P': case 0: goto _sleep;
         }
         NEXT_LOCATION(head) = pY;
         NEXT_LOCATION(head) = pX;

@@ -1,0 +1,11 @@
+name: test
+on: 
+  push:
+    paths: '*.c'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - run: gcc test.c -o test -lutil && ./test

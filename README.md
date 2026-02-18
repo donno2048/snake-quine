@@ -1,6 +1,11 @@
 # Snake quine
 
+[![Test status](https://github.com/donno2048/snake-quine/actions/workflows/test.yml/badge.svg)](https://github.com/donno2048/snake-quine/actions/workflows/test.yml)
+
+This is a snake game in the terminal, but each frame of the game is valid C code.
+
+If you compile a game frame, the executable will run the game from the moment the frame was taken.
+
 In order to play you have to use a monospaced terminal font, and font size small enough so that the game won't overflow.
 
-Arrow keys to move, q to quit, p to pause
-
+Use the arrow keys to move around, `q` to quit and `p` to pause.

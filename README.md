@@ -1,6 +1,8 @@
 # Snake quine
 
-[![Test status](https://github.com/donno2048/snake-quine/actions/workflows/test.yml/badge.svg)](https://github.com/donno2048/snake-quine/actions/workflows/test.yml)
+[![Test status](https://github.com/donno2048/snake-quine/actions/workflows/test-and-generate-gif.yml/badge.svg)](https://github.com/donno2048/snake-quine/actions/workflows/test-and-generate-gif.yml)
+
+![Gif](./main.gif)
 
 This is a snake game in the terminal, but each frame of the game is valid C code.
 

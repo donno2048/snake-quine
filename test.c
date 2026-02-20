@@ -5,10 +5,39 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <stdio.h>
+#define small_delay() usleep(100000)
+#define delay() usleep(1000000)
+// generated on my system using:
+// echo | bash --rcfile <(echo "PS1='$PS1'") -i 2>&1 | head -n1 | sed -n l | sed 's/\$$//'
+#define PS1 "\033[01;32mroot\033[00m@\033[01;34m/root/snake-quine\033[00m$ "
 
 int fd;
 
 char last_screen[6000];
+
+void _shell(const char *command) {
+    fflush(stdout);
+    delay();
+    for (; *command; command++) {
+        printf("%c", *command);
+        fflush(stdout);
+        small_delay();
+    }
+    delay();
+    puts("");
+}
+
+int shell(const char *command) {
+    _shell(command);
+    static const char *bash = "/bin/bash -c \"%s;%s\"";
+    static const char *envs = "gcc(){ $(which gcc) -Wall -Wextra -Wpedantic \\$@; }";
+    char *buf = malloc(strlen(bash) + strlen(envs) + strlen(command));
+    sprintf(buf, bash, envs, command);
+    int status = system(buf);
+    free(buf);
+    printf(PS1);
+    return status || !WIFEXITED(status) || WEXITSTATUS(status);
+}
 
 double now() {
     struct timespec ts;
@@ -42,13 +71,16 @@ void write_halt(const char *w, double seconds) {
 }
 
 int main() {
-    system("gcc main.c");
-    for (int i = 0; i < 5; i++) {
+    printf(PS1);
+    shell("# Snake game, but each frame is a valid C program, when compiled and run it starts playing from that moment");
+    shell("gcc main.c");
+    shell("# Use arrow keys to move, p to pause and q to quit");
+    for (int i = 0; i < 3; i++) {
         int pid = forkpty(&fd, NULL, NULL, NULL);
         if (pid == 0)
             execvp("./a.out", (char*[]){NULL});
         else {
-            sleep(1);
+            _shell("./a.out");
             write_halt("\x1b[A", 1);
             write_halt("\x1b[D", 1);
             write_halt("\x1b[B", .3);
@@ -61,13 +93,15 @@ int main() {
             write_halt("\x1b[C", 1.3);
             write_halt("\x1b[A", .7);
             write(fd, "q", 1);
+            waitpid(pid, NULL, 0);
+            printf(PS1);
+            _shell("copy_terminal _test.c");
+            printf(PS1);
             FILE *out = fopen("_test.c", "w");
             fputs(last_screen + 11, out);
             fclose(out);
-            waitpid(pid, NULL, 0);
-            int status = system("gcc _test.c");
-            if (status == -1 || !WIFEXITED(status) || WEXITSTATUS(status))
-                return -1;
+            shell("cat _test.c");
+            if (shell("gcc _test.c")) return -1;
         }
     }
     return 0;

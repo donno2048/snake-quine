@@ -1,0 +1,30 @@
+name: test and generate gif
+on: 
+  push:
+    paths: '*.c'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: $GITHUB_WORKFLOW
+  cancel-in-progress: false
+jobs:
+  test-and-gen:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - run: |
+        cargo install --git https://github.com/asciinema/agg
+        cargo install --locked --git https://github.com/asciinema/asciinema
+        gcc test.c -o test -lutil
+        asciinema rec main.cast -c ./test --return
+        agg main.cast main.gif --cols 150 --rows 60
+        git add main.gif
+        git config --global user.email "$GITHUB_REPOSITORY_OWNER_ID+$GITHUB_REPOSITORY_OWNER@users.noreply.github.com"
+        git config --global user.name "$GITHUB_REPOSITORY_OWNER"
+        git commit -m "$GITHUB_WORKFLOW" || true
+        git push || true
+        

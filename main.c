@@ -66,13 +66,13 @@ char *f = "};int m=%d,h="S(HEIGHT)",w="S(WIDTH)";%c#include<stdio.h>%c#include<s
 "y){case "S(UP)":dirX=0;dirY=-1;break;case "S(DOWN)":dirX=0;dirY=1;break;case "S(RIGHT)":dirX=1;dir"
 "Y=0;break;case "S(LEFT)":dirX=-1;dirY=0;break;case'Q':case'q':goto _exit;case'P':case'p':case 0:co"
 "ntinue;}NEXT_LOCATION(head)=pY;NEXT_LOCATION(head)=pX;pX+=dirX;pY+=dirY;switch(lines[pY][pX]){case"
-S(PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{char rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%("
-"h-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":{char*line"
-"=lines[NEXT_LOCATION(tail)];line[NEXT_LOCATION(tail)]="S(EMPTY)";}}lines[pY][pX]="S(PLAYER)";print"
-"f(%c%%c[H%%c[2J%%c[3Jchar lines[%d][%d] = {%c,27,27,27);for(char line=0;line<h;line++)printf(%c%%c"
-"%%c%%s%%c,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int loc=0;loc<m;loc++)pr"
-"intf(%c%%d,%c,locations[loc]);printf(f,m,10,10,10,"S(INCLUDES_FORMAT)",10,34,f,34,pX,pY,head,tail,"
-"dirX,dirY,34,h,w+1,34,34,34,34,m,34,34,34,10);}_exit:"S(RESET_SCREEN())"return 0;}%c";
+S(PLAYER)":case"S(WALL)":goto _exit;case"S(FOOD)":{int rX,rY;do{rX=(rand()%%(w-2))+1;rY=(rand()%%(h"
+"-2))+1;}while(lines[rY][rX]!="S(EMPTY)");lines[rY][rX]="S(FOOD)";break;}case"S(EMPTY)":{char*line="
+"lines[NEXT_LOCATION(tail)];line[NEXT_LOCATION(tail)]="S(EMPTY)";}}lines[pY][pX]="S(PLAYER)";printf"
+"(%c%%c[H%%c[2J%%c[3Jchar lines[%d][%d] = {%c,27,27,27);for(int line=0;line<h;line++)printf(%c%%c%%"
+"c%%s%%c,%c,10,34,lines[line],34);printf(%c};char locations[%d]={%c);for(int loc=0;loc<m;loc++)prin"
+"tf(%c%%d,%c,locations[loc]);printf(f,m,10,10,10,"S(INCLUDES_FORMAT)",10,34,f,34,pX,pY,head,tail,di"
+"rX,dirY,34,h,w+1,34,34,34,34,m,34,34,34,10);}_exit:"S(RESET_SCREEN())"return 0;}%c";
 
 int main() {
     SETUP_SCREEN();
@@ -114,7 +114,7 @@ int main() {
             case PLAYER: case WALL: goto _exit;
             case FOOD:
                 {
-                     char rX, rY;
+                     int rX, rY;
                      do {
                          rX = (rand() % (WIDTH - 2)) + 1;
                          rY = (rand() % (HEIGHT - 2)) + 1;
@@ -130,7 +130,7 @@ int main() {
         }
         lines[pY][pX] = PLAYER;
         printf("%c[H%c[2J%c[3Jchar lines[%d][%d] = {", 27, 27, 27, HEIGHT, WIDTH + 1);
-        for (char line = 0; line < HEIGHT; line++)
+        for (int line = 0; line < HEIGHT; line++)
             printf("%c%c%s%c,", 10, 34, lines[line], 34);
         printf("};char locations[%d]={", MAX_LOCATIONS);
         for (int loc = 0; loc < MAX_LOCATIONS; loc++)
@@ -142,4 +142,3 @@ _exit:
     RESET_SCREEN();
     return 0;
 }
-

@@ -5,6 +5,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: $GITHUB_WORKFLOW
+  cancel-in-progress: false
 jobs:
   test-and-gen:
     runs-on: ubuntu-latest

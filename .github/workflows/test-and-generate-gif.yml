@@ -16,6 +16,7 @@ jobs:
     - run: |
         cargo install --git https://github.com/asciinema/agg
         cargo install --locked --git https://github.com/asciinema/asciinema
+        export CFLAGS="-Wall"
         gcc test.c -o test -lutil
         asciinema rec main.cast -c ./test --return
         agg main.cast main.gif --cols 150 --rows 60

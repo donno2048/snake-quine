@@ -67,6 +67,7 @@ void write_halt(const char *w, double seconds) {
 
 int main() {
     printf(PS1);
+    shell("# Snake game, but each frame is a valid C program");
     shell("gcc main.c");
     shell("# Use arrow keys to move, p to pause and q to quit");
     for (int i = 0; i < 3; i++) {

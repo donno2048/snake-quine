@@ -7,7 +7,6 @@
 #include <stdio.h>
 #define small_delay() usleep(100000)
 #define delay() usleep(1000000)
-
 // generated on my system using:
 // echo | bash --rcfile <(echo "PS1='$PS1'") -i 2>&1 | head -n1 | sed -n l | sed 's/\$$//'
 #define PS1 "\033[01;32mroot\033[00m@\033[01;34m/root/snake-quine\033[00m$ "
@@ -16,23 +15,28 @@ int fd;
 
 char last_screen[6000];
 
-int _shell(const char *command, int fake) {
+void _shell(const char *command) {
     fflush(stdout);
     delay();
-    for (const char *c = command; *c; c++) {
-        printf("%c", *c);
+    for (; *command; command++) {
+        printf("%c", *command);
         fflush(stdout);
         small_delay();
     }
     delay();
     puts("");
-    int status = fake || system(command);
-    printf(PS1);
-    return status || !WIFEXITED(status) || WEXITSTATUS(status);
 }
 
 int shell(const char *command) {
-    return _shell(command, 0);
+    _shell(command);
+    static const char *bash = "/bin/bash -c \"%s;%s\"";
+    static const char *envs = "gcc(){ $(which gcc) -Wall -Wextra -Wpedantic \\$@; }";
+    char *buf = malloc(strlen(bash) + strlen(envs) + strlen(command));
+    sprintf(buf, bash, envs, command);
+    int status = system(buf);
+    free(buf);
+    printf(PS1);
+    return status || !WIFEXITED(status) || WEXITSTATUS(status);
 }
 
 double now() {
@@ -76,7 +80,7 @@ int main() {
         if (pid == 0)
             execvp("./a.out", (char*[]){NULL});
         else {
-            _shell("./a.out", 1);
+            _shell("./a.out");
             write_halt("\x1b[A", 1);
             write_halt("\x1b[D", 1);
             write_halt("\x1b[B", .3);
@@ -91,7 +95,8 @@ int main() {
             write(fd, "q", 1);
             waitpid(pid, NULL, 0);
             printf(PS1);
-            _shell("copy_terminal _test.c", 1);
+            _shell("copy_terminal _test.c");
+            printf(PS1);
             FILE *out = fopen("_test.c", "w");
             fputs(last_screen + 11, out);
             fclose(out);

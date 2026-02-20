@@ -6,6 +6,7 @@
 #include <time.h>
 #include <stdio.h>
 #define delay() usleep(1000000)
+
 // generated on my system using:
 // echo | bash --rcfile <(echo "PS1='$PS1'") -i 2>&1 | head -n1 | sed -n l | sed 's/\$$//'
 #define PS1 "\033[01;32mroot\033[00m@\033[01;34m/root/snake-quine\033[00m$ "

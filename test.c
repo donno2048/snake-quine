@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <stdio.h>
+#define small_delay() usleep(100000)
 #define delay() usleep(1000000)
 // generated on my system using:
 // echo | bash --rcfile <(echo "PS1='$PS1'") -i 2>&1 | head -n1 | sed -n l | sed 's/\$$//'
@@ -17,8 +18,11 @@ char last_screen[6000];
 int _shell(const char *command, int fake) {
     fflush(stdout);
     delay();
-    printf("%s", command);
-    fflush(stdout);
+    for (const char *c = command; *c; c++) {
+        printf("%c", *c);
+        fflush(stdout);
+        small_delay();
+    }
     delay();
     puts("");
     int status = fake || system(command);
@@ -64,16 +68,13 @@ void write_halt(const char *w, double seconds) {
 int main() {
     printf(PS1);
     shell("gcc main.c");
+    shell("# Use arrow keys to move, p to pause and q to quit");
     for (int i = 0; i < 3; i++) {
         int pid = forkpty(&fd, NULL, NULL, NULL);
         if (pid == 0)
             execvp("./a.out", (char*[]){NULL});
         else {
-            fflush(stdout);
-            delay();
-            printf("./a.out");
-            fflush(stdout);
-            delay();
+            _shell("./a.out", 1);
             write_halt("\x1b[A", 1);
             write_halt("\x1b[D", 1);
             write_halt("\x1b[B", .3);

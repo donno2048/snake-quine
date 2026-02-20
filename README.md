@@ -2,7 +2,7 @@
 
 [![Test status](https://github.com/donno2048/snake-quine/actions/workflows/test-and-generate-gif.yml/badge.svg)](https://github.com/donno2048/snake-quine/actions/workflows/test-and-generate-gif.yml)
 
-![Gif](./main.gif)
+[![Gif](./main.gif)](https://youtu.be/gvF7rWfcFD8)
 
 This is a snake game in the terminal, but each frame of the game is valid C code.
 

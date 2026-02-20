@@ -5,10 +5,30 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <stdio.h>
+#define delay() usleep(1000000)
+// generated on my system using:
+// echo | bash --rcfile <(echo "PS1='$PS1'") -i 2>&1 | head -n1 | sed -n l | sed 's/\$$//'
+#define PS1 "\033[01;32mroot\033[00m@\033[01;34m/root/snake-quine\033[00m$ "
 
 int fd;
 
 char last_screen[6000];
+
+int _shell(const char *command, int fake) {
+    fflush(stdout);
+    delay();
+    printf("%s", command);
+    fflush(stdout);
+    delay();
+    puts("");
+    int status = fake || system(command);
+    printf(PS1);
+    return status || !WIFEXITED(status) || WEXITSTATUS(status);
+}
+
+int shell(const char *command) {
+    return _shell(command, 0);
+}
 
 double now() {
     struct timespec ts;
@@ -42,13 +62,18 @@ void write_halt(const char *w, double seconds) {
 }
 
 int main() {
-    system("gcc main.c");
-    for (int i = 0; i < 5; i++) {
+    printf(PS1);
+    shell("gcc main.c");
+    for (int i = 0; i < 3; i++) {
         int pid = forkpty(&fd, NULL, NULL, NULL);
         if (pid == 0)
             execvp("./a.out", (char*[]){NULL});
         else {
-            sleep(1);
+            fflush(stdout);
+            delay();
+            printf("./a.out");
+            fflush(stdout);
+            delay();
             write_halt("\x1b[A", 1);
             write_halt("\x1b[D", 1);
             write_halt("\x1b[B", .3);
@@ -61,13 +86,14 @@ int main() {
             write_halt("\x1b[C", 1.3);
             write_halt("\x1b[A", .7);
             write(fd, "q", 1);
+            waitpid(pid, NULL, 0);
+            printf(PS1);
+            _shell("copy_terminal _test.c", 1);
             FILE *out = fopen("_test.c", "w");
             fputs(last_screen + 11, out);
             fclose(out);
-            waitpid(pid, NULL, 0);
-            int status = system("gcc _test.c");
-            if (status == -1 || !WIFEXITED(status) || WEXITSTATUS(status))
-                return -1;
+            shell("cat _test.c");
+            if (shell("gcc _test.c")) return -1;
         }
     }
     return 0;
